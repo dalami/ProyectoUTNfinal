@@ -11,6 +11,7 @@ require('dotenv').config()
 
 // 2. Trae la configuración de la base de datos
 const connectDb = require('./server/config/connectDB')
+const { prototype } = require('stream')
 
 // ----------------------------------------- LLAMO AL EXPRESS
 
@@ -20,8 +21,8 @@ const app = express()
 // ---------------------------------------- CONEXIÓN A LA DB
 
 // 4. Configura el puerto, utilizando el puerto definido en .env o el puerto 3500 por defecto
-const PORT = process.env.PORT || 3500
-
+const port = process.env.PORT;
+const host = process.env.HOST;
 // 5. Conexión a la base de datos
 connectDb()
 
@@ -52,6 +53,6 @@ app.use('/', require('./server/routes/mainRoute'))
 app.use('/', require('./server/routes/adminRoute'))
 
 // Inicia el servidor y escucha en el puerto configurado
-app.listen(PORT, () => {
+app.listen(port,host, () => {
     console.log('El servidor se ha conectado')
 })

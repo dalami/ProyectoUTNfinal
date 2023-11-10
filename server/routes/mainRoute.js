@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Productos = require('../models/productos')
-
+const mainController= require('../controllers/mainController')
 
 //// ------------------- VISTAS DE LOS MÓDULOS -------------------- ////
 
@@ -9,10 +9,9 @@ const Productos = require('../models/productos')
 
 // ------------------- RUTA PARA MOSTRAR MAIN ------------------- //
 
-router.get('', async (req, res) => {
-    res.render('index')   
-});
 
+
+router.get('', mainController.getProducts);
 
 
 // ------------------- RUTA PARA MOSTRAR - "ACERCA DE" ------------------- //
@@ -41,9 +40,8 @@ router.get('/main/listadoProductos', async (req, res) => {
 
 // ------------------- RUTA PARA MOSTRAR PRODUCTO ------------------- //
 
-router.get('/main/producto', async (req, res) => {
-    res.render('producto')
-});
+router.get('/main/:productId', mainController.getProductsItem);
+// router.get('/producto/:productId', authControllers.getProductsItem);
 
 // ------------------- RUTA PARA MOSTRAR LA PAGINA DE USUARIO ------------------- //
 
