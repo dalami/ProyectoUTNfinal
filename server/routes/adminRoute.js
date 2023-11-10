@@ -4,6 +4,12 @@ const Usuarios= require('../models/usuarios')
 const Productoss= require('../models/productos')
 const bcrypt = require('bcrypt');
 
+const{
+    signup_post,
+    login_post,
+    addProduct_post
+} = require('../controllers/adminController')
+
 
 //---------------------- GET -------------------------//
 
@@ -29,16 +35,16 @@ router.get('/register', (req,res)=>{
 
 // ------------------- PROCESAMOS EL FORMULARIO PARA INICIAR SESIÓN ------------------- //
 
-router.post('/admin',async(req,res)=>{})
+router.post('/admin',(req,res)=>{})
 
 // ------------------- PROCESAMOS EL FORMULARIO PARA AGREGAR UN PRODUCTO ------------------- //
 
-router.post('/add-product',async (req,res)=>{})
+router.post('/add-product', (req,res)=>{})
 
 
 // ------------------- PROCESAMOS EL FORMULARIO PARA REGISTRARSE ------------------- //
 
-router.post('/register',async (req,res)=>{})
+router.post('/register', (req,res)=>{})
 
 
 module.exports=router
