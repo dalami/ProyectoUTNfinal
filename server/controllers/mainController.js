@@ -22,13 +22,28 @@ const obtenerPreciosPorRangos = (range) => {
 
 const getProducts = async (req, res) => {
     try {
-      const products = await Product.find(); // Obtener los productos de la base de datos
-      res.render('index', { products }); // Renderizar la vista "home" con los datos de los productos
+        let perPage = 8;
+        let page = req.params.page || 1;
+
+        const products = await Product
+            .find({})
+            .skip((perPage * page) - perPage)
+            .limit(perPage)
+            .exec();
+
+        const count = await Product.countDocuments(); // Obtener el número total de productos
+
+        res.render('index', {
+            products,
+            current: page,
+            pages: Math.ceil(count / perPage)
+        });
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Error al cargar la página');
+        console.error(error);
+        res.status(500).send('Error al cargar la página');
     }
-  };
+};
+
 
 const getProductsItem = async (req, res) => {
     try {
