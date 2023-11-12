@@ -3,10 +3,22 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const Product =require('../models/productos')
 
+// Función para obtener la consulta de rango de precios
+const obtenerPreciosPorRangos = (range) => {
+    switch (range) {
+        case '10':
+            return { $lt: 10 };
+        case '25':
+            return { $gte: 10, $lte: 25 };
+        case '50':
+            return { $gte: 25, $lte: 50 };
+        case '100':
+            return { $gte: 50, $lte: 100 };
+        default:
+            return {};
+    }
+};
 
-const signup_post = (req, res) =>{}
-const login_post = (req, res) =>{}
-const addProduct_post = (req, res) =>{}
 
 const getProducts = async (req, res) => {
     try {
@@ -33,11 +45,54 @@ const getProductsItem = async (req, res) => {
     }
 };
 
+const buscador = async (req, res) => {
+    const keyword = req.query.keyword;
+
+    try {
+        const products = await Productos.find({
+            $or: [
+                { name: { $regex: keyword, $options: 'i' } },
+                { company: { $regex: keyword, $options: 'i' } },
+            ],
+        });
+        res.render('products', { products });
+    } catch (error) {
+        res.status(500).json({ error: 'Error en el servidor.' });
+    }
+}
+
+const filtro = async (req, res) => {
+    const keyword = req.query.keyword;
+    const priceRange = req.query.priceRange;
+    const company = req.query.company;
+
+    try {
+        let query = {
+            $or: [
+                { name: { $regex: keyword, $options: 'i' } },
+                { company: { $regex: keyword, $options: 'i' } },
+            ],
+        };
+
+        if (priceRange) {
+            query.price = obtenerPreciosPorRangos(priceRange);
+        }
+
+        if (company) {
+            query.company = company;
+        }
+
+        const products = await Product.find(query);
+        res.render('products', { products });
+    } catch (error) {
+        res.status(500).json({ error: 'Error en el servidor.' });
+    }
+}
+
 
 module.exports = {
-    signup_post,
-    login_post,
-    addProduct_post,
     getProductsItem,
-    getProducts
+    getProducts,
+    buscador,
+    filtro
 }
