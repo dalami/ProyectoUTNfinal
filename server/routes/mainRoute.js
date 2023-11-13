@@ -16,8 +16,8 @@ const {
 // ------------------- RUTA PARA MOSTRAR MAIN ------------------- //
 
 
-router.get('/', mainController.getProducts);
-router.get('/products/:page', mainController.getProducts);
+router.get('/', getProducts);
+router.get('/products/:page', getProducts);
 
 
 router.get('', getProducts);
